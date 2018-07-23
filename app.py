@@ -1,6 +1,7 @@
 import time
 import redis
 from flask import Flask
+import inflect
 
 app = Flask(__name__)
 cache = redis.Redis(host='redis', port=6379)
@@ -19,7 +20,8 @@ def get_hit_count():
 @app.route('/')
 def hello():
     count = get_hit_count()
-    return 'Hello world, I have been seen {} times.\n'.format(count)
+    p = inflect.engine()
+    return 'Hello world, I have been seen {} {}.\n'.format(count, p.plural('time'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
